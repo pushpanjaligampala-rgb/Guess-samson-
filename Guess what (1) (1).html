@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Valentine Surprise</title>
+
+<style>
+body{
+  margin:0;
+  background:#ffb6c1;
+  font-family:'Comic Sans MS', cursive;
+  color:white;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+.screen{
+  text-align:center;
+  width:100%;
+  max-width:430px;
+  padding:20px;
+}
+h1{font-size:38px;}
+h2{font-size:40px;}
+h3{font-size:26px;}
+p{font-size:26px; line-height:1.5;}
+button{
+  padding:16px 28px;
+  margin:16px;
+  font-size:30px;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+}
+.hidden{display:none;}
+
+/* ❤️ HEARTS */
+.heart{
+  position:fixed;
+  font-size:44px;
+  animation-duration:14s;
+  animation-iteration-count:infinite;
+}
+@keyframes up{
+  from{transform:translateY(100vh);opacity:1;}
+  to{transform:translateY(-140vh);opacity:0;}
+}
+@keyframes down{
+  from{transform:translateY(-140vh);opacity:1;}
+  to{transform:translateY(100vh);opacity:0;}
+}
+
+/* ANSWERS */
+.correct{color:#00ff99;}
+.wrong{color:#ff4d4d;}
+.cute{color:#ff69b4;}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 MUSIC -->
+<audio autoplay loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+</audio>
+
+<!-- STEP 1 -->
+<div id="step1" class="screen">
+  <h1>Samson will be my Valentine 💖</h1>
+  <button onclick="yesClick()">Yes 😉</button>
+  <button id="noBtn">No 😝</button>
+  <h2 id="yesMsg"></h2>
+  <button id="nextBtn" class="hidden" onclick="showGifts()">Next ➡️</button>
+</div>
+
+<!-- GIFTS -->
+<div id="gifts" class="screen hidden">
+  <h1>Something for you 🎁</h1>
+  <button onclick="openGift1()">Gift 1</button>
+  <button onclick="openGift2()">Gift 2</button>
+  <button onclick="openGift3()">Gift 3</button>
+</div>
+
+<!-- 🎀 GIFT 1 -->
+<div id="gift1" class="screen hidden">
+  <h2>Quiz for you 🎀</h2>
+  <h3 id="q"></h3>
+  <div id="opts"></div>
+  <p id="ans"></p>
+  <button id="nextQ" class="hidden" onclick="nextQuestion()">Next ➡️</button>
+  <button id="backG1" class="hidden" onclick="backToGifts()">Back 🔙</button>
+</div>
+
+<!-- ✉️ GIFT 2 -->
+<div id="gift2" class="screen hidden">
+  <h1>✉️ My Pookie 🎀</h1>
+  <p>
+    Happy Valentine’s Day 💖<br>
+    You make my days brighter and my nights warmer ✨<br>
+    With you, every moment feels special 💫<br>
+    Thank you for loving me, caring for me, and choosing me 🫶<br>
+    I promise to stand by you, always and forever 💕<br>
+    Forever yours 💞
+  </p>
+  <button onclick="backToGifts()">Back 🔙</button>
+</div>
+
+<!-- 🎂 GIFT 3 -->
+<div id="gift3" class="screen hidden">
+  <h2>What gift do you want for your birthday? 🎂</h2>
+  <button onclick="birthday('A')">A. A day out together</button>
+  <button onclick="birthday('B')">B. Jacket & Perfume</button>
+  <button onclick="birthday('C')">C. 19 gifts</button>
+  <p id="bmsg"></p>
+  <button onclick="finish()">Finish 💖</button>
+</div>
+
+<!-- 🎀 FINAL -->
+<div id="final" class="screen hidden">
+  <h1 style="font-size:80px;">🎀</h1>
+</div>
+
+<script>
+// ❤️ HEARTS (more + slow)
+setInterval(()=>{
+  for(let i=0;i<2;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationName=Math.random()>0.5?"up":"down";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),14000);
+  }
+},600);
+
+// NO BUTTON RUN
+noBtn.onmouseover=()=>{
+  noBtn.style.position="absolute";
+  noBtn.style.left=Math.random()*70+"%";
+  noBtn.style.top=Math.random()*70+"%";
+};
+
+// STEP 1
+function yesClick(){
+  yesMsg.innerHTML="I knew it ❤️ you'd say yes<br>I love you 💞";
+  nextBtn.classList.remove("hidden");
+}
+function showGifts(){
+  step1.classList.add("hidden");
+  gifts.classList.remove("hidden");
+}
+
+// BACK
+function backToGifts(){
+  gift1.classList.add("hidden");
+  gift2.classList.add("hidden");
+  gift3.classList.add("hidden");
+  gifts.classList.remove("hidden");
+}
+
+// QUIZ
+const questions=[
+ {q:"Who is the absolutely boss in the relationship?",
+  o:["Pushpanjali","Samson","Both"],
+  c:["correct","wrong","wrong"],
+  t:["Yes correct 🎉","Incorrect ❌","Incorrect ❌"]},
+ {q:"Who are you in love with?",
+  o:["Pushpanjali","No more options"],
+  c:["cute","wrong"],
+  t:["Awwwww 🥰 I love you",""]},
+ {q:"Where I do plan to spend the rest of my life?",
+  o:["Home","In your heart","Paris"],
+  c:["wrong","correct","wrong"],
+  t:["No ❌","Yessssss 🎀","No ❌"]}
+];
+let i=0;
+
+function openGift1(){
+  gifts.classList.add("hidden");
+  gift1.classList.remove("hidden");
+  i=0; loadQ();
+}
+function loadQ(){
+  q.innerText=questions[i].q;
+  opts.innerHTML="";
+  ans.innerText=""; ans.className="";
+  nextQ.classList.add("hidden");
+  backG1.classList.add("hidden");
+  questions[i].o.forEach((op,j)=>{
+    const b=document.createElement("button");
+    b.innerText=op;
+    b.onclick=()=>{
+      ans.innerText=questions[i].t[j];
+      ans.className=questions[i].c[j];
+      nextQ.classList.remove("hidden");
+    };
+    opts.appendChild(b);
+  });
+}
+function nextQuestion(){
+  i++;
+  if(i<questions.length){ loadQ(); }
+  else{
+    q.innerText="🎉 Finish! You passed the test";
+    opts.innerHTML="";
+    nextQ.classList.add("hidden");
+    backG1.classList.remove("hidden");
+  }
+}
+
+// GIFTS
+function openGift2(){ gifts.classList.add("hidden"); gift2.classList.remove("hidden"); }
+function openGift3(){ gifts.classList.add("hidden"); gift3.classList.remove("hidden"); }
+function birthday(x){ bmsg.innerText=(x==="C")?"Gadidha 😝":"Ok done 🎀"; }
+function finish(){
+  gift3.classList.add("hidden");
+  final.classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
+<body>
+  
+</body>
+
+</html>
